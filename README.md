@@ -29,5 +29,22 @@ Contains location information about each store. This was imported via Azure Blob
 
 Contains customer information including email address and address for each operating region. This was a zip folder containing 3 .csv files - it was imported as a folder and the data combined into one query. 
 
-* A new column was created to combine first name and last name to make full name 
+* A new column was created to combine first name and last name to make full name
 
+
+### Phase 2 - Creating the Data Model 
+
+A date table had to be created to allow time intelligence analysis with continuous date data covering the whole time period from the earliest Orders[Order Date] to the latest Orders[Shipping Date]. 
+
+DESCRIPTION OF  HOW MADE DATE TABLE AND SCREENSHOT OF DAX FORMULA 
+
+Some relationships had to be manually put together in a one-to-many relationship in single filter direction to form the star schema. 
+
+* Products[product_code] to Orders[product_code]
+* Stores[store code] to Orders[Store Code]
+* Customers[User UUID] to Orders[User ID]
+* Dates[date] to Orders[Order Date] - this had to be activated 
+* Dates[date] to Orders[Shipping Date]
+
+A new measures table was created to organise all of my measures and keep them under one table. I created an empty table using DAX formula to hold the measures under. 
+DAX FORMULA FOR CREATING NEW MEASURES TABLE
