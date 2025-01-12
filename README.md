@@ -220,5 +220,22 @@ The final pages are below:
 
 ![image](https://github.com/user-attachments/assets/2d70bea2-4297-4995-a9d8-ca5c1ed48f81)
 
+#### Stores Map Page: 
+
+The stores map page has an interactive map visual showing Profit YTD and the location hierarchy which you can drilldown. It has a selection slicer to choose the specific country - UK, US or Germany. 
+
+I then created a stores drillthrough page which when you pinpoint a store location on the map, it will take you to this page and show further insights such as top 5 products table, total orders by category chart and x2 gauges showing profit YTD against a profit goal of 20% year-on-year with the same for revenue. 
+
+The goals were created using new measures i.e. 
+
+        Revenue Goal = CALCULATE([Revenue YTD] * 1.2, SAMEPERIODLASTYEAR(Dates[Date]))
+
+The goal values were the target on the gauge visual, not the maximum value. 
+
+The stores drillthrough page had to be set to drillthrough within the 'build a visual' section of the visualizations pane. Under drillthrough, I added the filter as Stores[Country Region] and set to drill through when 'used as category'. 
+
+I then created a store tooltips page where you can see the profit performance gauge when you hover over the location on the map. I copied the gauge from the drillthrough page and in the format pane under 'canvas settings', I set it to tooltip. 
+
+All 3 pages are shown below: 
 
 
