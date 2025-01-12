@@ -145,3 +145,6 @@ VAR TopUUID =
         CALCULATE(SELECTEDVALUE(Customers[User UUID]), TOPN(1, Customers, [Total Revenue], DESC)) 
 RETURN 
         CALCULATE(COUNTROWS(orders), Orders[User ID] = TopUUID)
+
+This is the final page:
+![image](https://github.com/user-attachments/assets/61081e0d-e704-461a-8860-b70cbb413113)
