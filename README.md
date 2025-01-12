@@ -112,4 +112,36 @@ New calculated columns were created in the stores column to add to the geography
 In addition to the country column, a full geography column was created to make mapping more accurate. The formula for this column was: 
 
         Geography = Stores[Country Region] & ", " & Stores[Country]
+        
+### Phase 3 - Setting Up the Report 
 
+Four essential report pages were set up - Executive Summary, Customer Detail, Product Detail, Stores Map. I chose a colour-blind friendly theme to ensure accessibility. 
+
+#### Customer Detail Page: 
+
+This page consists of many visuals aiding in customer-level analysis including cards, line chart, table, donut chart, slicers. 
+
+Headline cards: 
+
+These include key metrics including total unique customers and revenue per customer. This meant creating new measures: 
+
+* Total Customers = CALCULATE(DISTINCTCOUNT(Orders[User UD]))
+* Revenue per Customer = [Total Revenue] / [Total Customers]
+
+x2 donut charts were created to show total customers by country and category(product) using [Total Customers] as the value and country/category as the legend. 
+
+The line chart showed total customers over time, allowing drilldown to month level using the date hierarchy created earlier. Trendlines and forecasts for next 10 periods were creating in the further analysis tab. 
+
+The top 20 customers, filtered by revenue, were shown in a table along with their number of orders. In the 'filters on this visual' section, I had to create a TOPN filter type by value of total revenue to display these top customers. When right clicking over total revenue in the values category, I was able to select conditional formatting of data bars for that column. 
+
+3 Cards were created to show the top customers' (by revenue) name, revenue and number or orders. This was done by creating separate measures for each card: 
+
+Top Customer Name = CALCULATE(SELECTEDVALUE(Customers[Full Name]), TOPN(1, Customers, [Total Revenue], DESC))
+
+Top Customer Revenue = CALCULATE(MAXX(TOPN(1, Customers, [Total Revenue], DESC), [Total Revenue]))
+
+Top Customer Orders = 
+VAR TopUUID = 
+        CALCULATE(SELECTEDVALUE(Customers[User UUID]), TOPN(1, Customers, [Total Revenue], DESC)) 
+RETURN 
+        CALCULATE(COUNTROWS(orders), Orders[User ID] = TopUUID)
