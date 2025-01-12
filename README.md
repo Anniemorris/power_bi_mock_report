@@ -59,29 +59,47 @@ Some relationships had to be manually put together in a one-to-many relationship
 ![image](https://github.com/user-attachments/assets/d6d88dc4-921d-4b83-ba8a-a46ccc7b6b05)
 
 A new measures table was created to organise all of my measures and keep them under one table. I created an empty table using DAX formula to hold the measures under. 
+
 = #table({"Measure_1"}, {{1}}) 
+
 This created a one column, one row table. 
 
 The following key measures were created: 
 * 'Total Orders' -> counts the number of orders in the Orders table
+  
         Total Orders = COUNTROWS(Orders)
-* 'Total Revenue' -> multiplies the Orders[Product Quantity] column by the Products[Sale_Price] column for each row, and then sums the result - uses RELATED function to allow selection of multiple related tables 
+  
+* 'Total Revenue' -> multiplies the Orders[Product Quantity] column by the Products[Sale_Price] column for each row, and then sums the result - uses RELATED function to allow selection of multiple related tables
+  
         Total Revenue = SUMX(Orders, (Orders[Product Quantity] * RELATED(Products[Sale Price]))
+  
 * 'Total Profit' -> For each row, subtract the Products[Cost_Price] from the Products[Sale_Price], and then multiply the result by the Orders[Product Quantity], Sums the result for all rows
+  
         Total Profit = SUMX(Orders, (RELATED(Products[Sale Price]) - RELATED(Products[Cost Price])) * Orders[Product Quantity])
+  
 * 'Total Customers' -> counts the number of unique customers in the Orders table. To account for filtering I utilised the CALCULATE function to override existing filters.
+
         Total Customers = CALCULATE(DISTINCTCOUNT(Orders[User ID]))
+  
 * 'Total Quantity' -> counts the number of items sold in the Orders table
+
         Total Quantity = SUM(Orders[Product Quantity])
+
 * 'Profit YTD' -> calculates the total profit for the current year
+
         Profit YTD = TOTALYTD([Total Profit], Dates[Date])
+
 * 'Revenue YTD' -> calculates the total revenue for the current year
+  
         Revenue YTD = TOTALYTD([Total Revenue], Dates[Date])
 
 Hierarchies aid visualisations so I created a date hierarchy to drill-down in my line charts from start of year, to the day. A geography-based hierachy was also created to allow filtering by region, country and province. 
 
 New calculated columns were created in the stores column to add to the geography hierarchy. Country codes were translated to Country name using x2 IF statements: 
+
         Country = IF(Stores[Country Code] = "GB", "United Kingdom", IF(Stores[Country Code] = "US", "United States", "Germany"))
+
 In addition to the country column, a full geography column was created to make mapping more accurate. The formula for this column was: 
+
         Geography = Stores[Country Region] & ", " & Stores[Country]
 
