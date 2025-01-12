@@ -56,6 +56,8 @@ Some relationships had to be manually put together in a one-to-many relationship
 * Dates[date] to Orders[Order Date] - this had to be activated 
 * Dates[date] to Orders[Shipping Date]
 
+![image](https://github.com/user-attachments/assets/d6d88dc4-921d-4b83-ba8a-a46ccc7b6b05)
+
 A new measures table was created to organise all of my measures and keep them under one table. I created an empty table using DAX formula to hold the measures under. 
 = #table({"Measure_1"}, {{1}}) 
 This created a one column, one row table. 
