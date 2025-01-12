@@ -178,3 +178,6 @@ For each of these measures, the target measures were also created:
         Target Orders = CALCULATE([Previous Quarter Orders] * 1.05)
 
 The value field was total revenue/profit/orders, the trend axis was start of quarter and the target was target revenue/profit/orders. 
+
+The final page is below: 
+![image](https://github.com/user-attachments/assets/2f6fea0d-2307-4712-a699-e0d16180ae00)
