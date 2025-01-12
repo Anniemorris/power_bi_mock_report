@@ -238,4 +238,13 @@ I then created a store tooltips page where you can see the profit performance ga
 
 All 3 pages are shown below: 
 
+Stores Map: 
+![image](https://github.com/user-attachments/assets/26ecbaa1-ef81-4c54-83fd-466a8b901ea8)
+
+Stores Drillthrough example (Iowa): 
+![image](https://github.com/user-attachments/assets/b5357eca-a286-40a0-9d5a-88f5cdd9e246)
+
+Profit Gauge tooltip page: 
+![image](https://github.com/user-attachments/assets/1562aa49-5c09-44b1-861c-f3c5823ad152)
+
 
