@@ -248,3 +248,12 @@ Profit Gauge tooltip page:
 ![image](https://github.com/user-attachments/assets/1562aa49-5c09-44b1-861c-f3c5823ad152)
 
 
+#### Phase 4 - Navigation Bar and Cross-Filtering 
+
+For some visuals I had to select them and click 'edit interactions' to fix the cross-filtering between specific visuals. Any TOPN tables should not filter anything else on the page. 
+
+The navigation bar then had to be able to navigate to the specific page. I added x4 buttons to navigate to each of my 4 main report pages with the icons provided. These were custom .png icons with settings applied to the default state. They were then updated to change from white to cyan on hover under style, state by updating the .png files to cyan as provided. 
+
+The icons are below: 
+
+
