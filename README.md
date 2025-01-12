@@ -35,15 +35,25 @@ Contains customer information including email address and address for each opera
 ### Phase 2 - Creating the Data Model 
 
 A date table had to be created to allow time intelligence analysis with continuous date data covering the whole time period from the earliest Orders[Order Date] to the latest Orders[Shipping Date]. 
+
         Dates = CALENDAR(MIN(Orders[Order Date]), MAX(Orders[Shipping Date]))
+        
         Day of Week = FORMAT(Dates[Date], "dddd")
+        
         Month Name = FORMAT(Dates[Date], "MMMM")
+        
         Month Number = MONTH(Dates[Date])
+        
         Quarter = QUARTER(Dates[Date])
+        
         Year = YEAR(Dates[Date])
+        
         Start of Week = Dates[Date] - WEEKDAY(Dates[Date],2) + 1 # the 2 signals 2 as the start of the week (Monday) subtracting the weekday number from the date, it becomes the start of the week at the +1 (Sunday is the default start of the week)
+        
         Start of Month = STARTOFMONTH(Dates[Date])
+        
         Start of Quarter = STARTOFQUARTER(Dates[Date])
+        
         Start of Year = STARTOFYEAR(Dates[Date])
 
 The table was maked as date table under table tools tab. 
