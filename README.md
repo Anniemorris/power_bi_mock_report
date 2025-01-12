@@ -181,3 +181,41 @@ The value field was total revenue/profit/orders, the trend axis was start of qua
 
 The final page is below: 
 ![image](https://github.com/user-attachments/assets/2f6fea0d-2307-4712-a699-e0d16180ae00)
+
+#### Product Detail Page: 
+
+This page provides in depth insights into the products, what is performing well and where. 
+
+Again there are multiple visuals on this page - gauge visuals showing current quarter performance vs targets, top 10 products table, area chart with revenue per product category and a scatter chart with profit per item. 
+
+The gauge visuals show current-quarter performance of revenue, profit and orders against a target of 10% quarter on quarter growth. Due to the dataset only going through to 2Q23 I had to calculate current metrics using TOTALQTD i.e. 
+
+        Current Quarter Orders = CALCULATE(TOTALQTD([Total Orders], 'Dates'[Date]), Dates[Year] = 2023, Dates[Quarter] = 2) 
+
+        Orders Quarterly Target = CALCULATE(TOTALQTD([Total Orders], 'Dates'[Date]), Dates[Year] = 2023, Dates[Quarter] = 1) * 1.10
+
+        Orders Gap = [Current Quarter Orders] - [Orders Quarterly Target]
+
+Conditional formatting of the callout value if <0 will show the number as red where performance has not met target. 
+
+The area chart shows how product categories perform in terms of revenue over time with Dates[Start of Quarter] on x-axis and Total Revenue on the y-axis and Product[Category] as the legend.
+
+A top 10 products table was created using the same format as the top customer table. A new measure for profit per order had to be created: 
+
+        Profit per Order = SUMX(Products, Products[Sale Price] - Products[Cost Price])
+
+A scatter graph was then creating showing quantity sold vs profit per item. This required a new calculated column within the product table subtracting the cost price by sales price for each row. 
+
+A slicer toolbar was added to this page to aid filtering by product category and country: 
+
+* A custom button representing a filter was added to my navigation bar
+* A larger navigation bar to fit x2 slicers was placed on top of the current navigation bar with the 2 vertical list slicers for country and product category
+* Both slicers required a select all option and the option to select multiple at once
+* The slicers and toolbar were grouped together along with the addition of a back button 
+* I created 2 bookmarks - one with the slicer toolbar open and one with it closed and assigned actions to the back and filter buttons that when clicked on will perform the appropriate action, taking you to that bookmark
+
+The final pages are below: 
+
+
+
+
