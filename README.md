@@ -148,3 +148,33 @@ RETURN
 
 This is the final page:
 ![image](https://github.com/user-attachments/assets/61081e0d-e704-461a-8860-b70cbb413113)
+
+#### Executive Summary Page: 
+
+The purpose of this page in the report was for a high-level executive summary detailing the companys performance as a whole showing revenue through time and by country, orders by category and a number of KPIs. 
+
+x3 key measures were added to card visuals - total revenue, total orders and total profit. 
+
+The formatted line chart from the customer detail page was copied over for ease with date hierarchy on the x axis and total revenue on the y axis. 
+
+x2 donut charts were created using total revenue by country and by store type. I had some issues with these needing troubleshooting as all categories were just split equally i.e. revenue by country was 33.33% each. To fix this I had to ensure the required relationships were active. 
+
+A bar chart for total orders by product category was created with data labels added on with homewares being most popular. 
+
+Finally x3 KPI's had to be created to show performance based on targets - previous quarter profit, previous quarter revenue, previous quarter orders - along with targets equal to 5% growth compared to previous quarter. 
+
+        Previous Quarter Revenue = CALCULATE([Total Revenue], PREVIOUSQUARTER(Dates[Date]))
+        
+        Previous Quarter Profit = CALCULATE([Total Profit], PREVIOUSQUARTER(Dates[Date]))
+        
+        Previous Quarter Orders = CALCULATE([Total Orders], PREVIOUSQUARTER(Dates[Date]))
+
+For each of these measures, the target measures were also created:
+
+        Target Revenue = CALCULATE([Previous Quarter Revenue] * 1.05)
+
+        Target Profit = CALCULATE([Previous Quarter Profit] * 1.05)
+
+        Target Orders = CALCULATE([Previous Quarter Orders] * 1.05)
+
+The value field was total revenue/profit/orders, the trend axis was start of quarter and the target was target revenue/profit/orders. 
