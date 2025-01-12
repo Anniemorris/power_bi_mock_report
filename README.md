@@ -256,4 +256,5 @@ The navigation bar then had to be able to navigate to the specific page. I added
 
 The icons are below: 
 
+![image](https://github.com/user-attachments/assets/90dcdbc8-0019-4845-b538-d1f213d57f70)
 
