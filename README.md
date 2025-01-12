@@ -216,6 +216,9 @@ A slicer toolbar was added to this page to aid filtering by product category and
 
 The final pages are below: 
 
+![image](https://github.com/user-attachments/assets/b7e2135e-8ec5-4502-8618-4e66a813b48a)
+
+![image](https://github.com/user-attachments/assets/2d70bea2-4297-4995-a9d8-ca5c1ed48f81)
 
 
 
