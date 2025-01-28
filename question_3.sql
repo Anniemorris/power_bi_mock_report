@@ -12,7 +12,7 @@ JOIN
     ON orders_powerbi."Store Code" = dim_stores."store code"
 WHERE
     dim_stores.country_code = 'DE'
-    AND DATE_PART('year', TO_DATE(orders_powerbi."Order Date", 'YYYY-MM-DD')) = 2022
+    AND EXTRACT(YEAR FROM orders_powerbi."Order Date"::DATE) = 2022
 GROUP BY
     dim_stores.store_type
 ORDER BY 

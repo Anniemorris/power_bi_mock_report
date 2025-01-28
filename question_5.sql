@@ -1,7 +1,7 @@
 SELECT 
     EXTRACT(YEAR FROM DATE_TRUNC('day', TO_DATE(o.order_date, 'DD/MM/YYYY'))) AS Year,
     p.category,
-    SUM((CAST(REPLACE(p.sale_price::TEXT, '£', '') AS NUMERIC) - CAST(REPLACE(p.cost_price::TEXT, '£', '') AS NUMERIC)) * o.product_quantity) AS total_profit
+    SUM((CAST(p.sale_price AS NUMERIC) - CAST(p.cost_price AS NUMERIC)) * o.product_quantity) AS total_profit
 FROM 
     orders o
 JOIN 
@@ -15,6 +15,4 @@ GROUP BY
     Year, p.category
 ORDER BY 
     total_profit DESC;
-
-
 

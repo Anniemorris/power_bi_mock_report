@@ -263,54 +263,130 @@ The icons are below:
 
 SQL queries can be used to answer questions about the database: 
 
-1. How many staff are there in all of the UK stores? A sum of the staff numbers column in the dim_stores table, filtered by country code = GB gives the answer of 13273.
+1. How many staff are there in all of the UK stores? 
+
+A sum of the staff numbers column in the dim_stores table, filtered by country code = GB gives the answer of 13273.
+
 
 SELECT SUM("staff numbers") AS uk_staff 
+
 FROM dim_stores
+
 WHERE country_code = 'GB';
 
-2. Which month in 2022 has had the highest revenue? The order date column had dates and times so I used DATE_TRUNC to extract the month and year from the date. CAST(REGEX_REPLACE) was necessary to remove the currency symbol from the column to then be transformed to numeric rather than text data. The JOIN statement allows calculation of total_revenue. It is then grouped by month and year to show highest revenue in month 8 (August).
+
+2. Which month in 2022 has had the highest revenue? 
+
+The order date column had dates and times so I used DATE_TRUNC to extract the month and year from the date. CAST(REGEX_REPLACE) was necessary to remove the currency symbol from the column to then be transformed to numeric rather than text data. The JOIN statement allows calculation of total_revenue. It is then grouped by month and year to show highest revenue in month 8 (August).
 
 SELECT 
     EXTRACT(YEAR FROM DATE_TRUNC('day', orders_powerbi."Order Date"::timestamp)) AS Year,
     EXTRACT(MONTH FROM DATE_TRUNC('day', orders_powerbi."Order Date"::timestamp)) AS Month,
     SUM(orders_powerbi."Product Quantity" * CAST(REGEXP_REPLACE(dim_products.product_price, '[^0-9.]', '', 'g')
  AS NUMERIC)) AS Total_Revenue
+
 FROM orders_powerbi
+
 JOIN dim_products
+
 ON orders_powerbi.product_code = dim_products.product_code
+
 WHERE
     DATE_TRUNC('day', orders_powerbi."Order Date"::timestamp) BETWEEN '2022-01-01' AND '2022-12-31'
+
 GROUP BY
     EXTRACT(YEAR FROM DATE_TRUNC('day', orders_powerbi."Order Date"::timestamp)), 
     EXTRACT(MONTH FROM DATE_TRUNC('day', orders_powerbi."Order Date"::timestamp))
+
 ORDER BY 
     Total_Revenue DESC;
 
-3. Which German store type had the highest revenue for 2022? Using some of the same code as above. The tables are related by store code and product code. Results are filtered by DE country code and 2022 date and is grouped by store date and shown by total revenue with highest revenue from local stores. 
+
+3. Which German store type had the highest revenue for 2022? 
+
+Using some of the same code as above. The tables are related by store code and product code. Results are filtered by DE country code and 2022 date and is grouped by store date and shown by total revenue with highest revenue from local stores. 
 
 SELECT 
     dim_stores.store_type, 
     SUM(orders_powerbi."Product Quantity" * CAST(REGEXP_REPLACE(dim_products.product_price, '[^0-9.]', '', 'g')
  AS NUMERIC)) AS Total_Revenue
+
 FROM 
     orders_powerbi
+
 JOIN 
     dim_products
     ON orders_powerbi.product_code = dim_products.product_code
+
 JOIN 
     dim_stores
     ON orders_powerbi."Store Code" = dim_stores."store code"
+
 WHERE
     dim_stores.country_code = 'DE'
     AND EXTRACT(YEAR FROM orders_powerbi."Order Date"::DATE) = 2022
+
 GROUP BY
     dim_stores.store_type
+
 ORDER BY 
     Total_Revenue DESC;
 
-4. Create a view where the rows are the store types and the columns are the total sales, percentage of total sales and the count of orders
+
+4. Create a view where the rows are the store types and the columns are the total sales, percentage of total sales and the count of orders.
+
+CREATE OR REPLACE VIEW used so I can ammend the code. Total sales column created multiplying product price by quantity. Percentage of total sales calculated as sales for each store type / total. The view is formed of joins based on product code and store code. 
+
+OVER() function specifies all rows to calculate over. 
+
+CREATE OR REPLACE VIEW "store_summary" AS
+
+SELECT 
+    s.store_type, 
+    SUM(CAST(REPLACE(p.product_price, '£', '') AS NUMERIC) * o."Product Quantity") AS total_sales,
+    (SUM(CAST(REPLACE(p.product_price, '£', '') AS NUMERIC) * o."Product Quantity") * 100.0 /
+     SUM(SUM(CAST(REPLACE(p.product_price, '£', '') AS NUMERIC) * o."Product Quantity")) OVER ()) AS percentage_of_total_sales,
+    COUNT(o."User ID") AS order_count
+
+FROM 
+    orders_powerbi o
+
+JOIN 
+    dim_products p ON o.product_code = p.product_code
+
+JOIN 
+    dim_stores s ON o."Store Code" = s."store code"
+
+GROUP BY 
+    s.store_type;
 
 
-5. Which product category generated the most profit for the "Wiltshire, UK" region in 2021?
+5. Which product category generated the most profit for the "Wiltshire, UK" region in 2021? 
 
+Total profit was calculated by sale price minus cost price, using CAST to convert to numeric data. The WHERE line filters by Wiltshire location and 2021 date and grouped by category. Homeware has highest profits.  
+
+(I had to delete and reconnect to the database so some column names are different for this question and now prices do not include £)
+
+SELECT 
+    EXTRACT(YEAR FROM DATE_TRUNC('day', TO_DATE(o.order_date, 'DD/MM/YYYY'))) AS Year,
+    p.category,
+    SUM((CAST(p.sale_price AS NUMERIC) - CAST(p.cost_price AS NUMERIC)) * o.product_quantity) AS total_profit
+
+FROM 
+    orders o
+
+JOIN 
+    dim_products p ON o.product_code = p.product_code
+
+JOIN 
+    dim_stores s ON o.store_code = s.store_code
+
+WHERE 
+    s.country_region = 'Wiltshire' 
+    AND TO_DATE(o.order_date, 'DD/MM/YYYY') BETWEEN '2021-01-01' AND '2021-12-31'
+
+GROUP BY 
+    Year, p.category
+
+ORDER BY 
+    total_profit DESC;
